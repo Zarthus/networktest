@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/zarthus/networktest/v2/assert"
 	"github.com/zarthus/networktest/v2/assert/lib"
 	"os"
 	"time"
@@ -51,6 +52,25 @@ func doRun(it item, args lib.Args, colourize bool) {
 	result := it.Runnable(args)
 
 	Write(result, colourize)
+}
+
+func createSuite(args lib.Args) []item {
+	suite := []item{
+		//{method: misc, Runnable: assert.CheckPrivilegedUser},
+		{method: misc, Runnable: assert.CheckIpVersions},
+		//{method: misc, Runnable: assert.CheckInterfaces},
+		{method: dns, Runnable: assert.DnsLookupIp},
+		{method: dns, Runnable: assert.DnsLookupMx},
+		{method: dns, Runnable: assert.ProbeDns},
+		{method: v4, Runnable: assert.ProbeV4},
+		{method: v6, Runnable: assert.ProbeV6},
+		{method: dns, Runnable: assert.QueryHttpsDns},
+		{method: v4, Runnable: assert.QueryHttpV4},
+		{method: v6, Runnable: assert.QueryHttpV6},
+	}
+	suite = append(suite, suiteExtras(args)...)
+
+	return applyFilter(args, suite)
 }
 
 func applyFilter(args lib.Args, suite []item) []item {

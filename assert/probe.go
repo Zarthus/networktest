@@ -14,21 +14,21 @@ func ProbeDns(args lib.Args) lib.Result {
 	host, port := lib.SplitHostAndPort(lib.GetHost(args, "w3.org:443"))
 	err := probe(host, port, args.TimeoutSeconds)
 
-	return lib.ResultByError("Probe using DNS", probeAssertion(host, port), err, nil)
+	return lib.ResultByError("Probe using DNS", lib.ConnectionAssertion(host, port), err, nil)
 }
 
 func ProbeV4(args lib.Args) lib.Result {
 	host, port := lib.SplitHostAndPort(lib.GetHost(args, network.W3OrgV4Address+":443"))
 	err := probe(host, port, args.TimeoutSeconds)
 
-	return lib.ResultByError("Probe using v4 IP", probeAssertion(host, port), err, nil)
+	return lib.ResultByError("Probe using v4 IP", lib.ConnectionAssertion(host, port), err, nil)
 }
 
 func ProbeV6(args lib.Args) lib.Result {
 	host, port := lib.SplitHostAndPort(lib.GetHost(args, network.W3OrgV6Address+":443"))
 	err := probe(host, port, args.TimeoutSeconds)
 
-	return lib.ResultByError("Probe using v6 IP", probeAssertion(host, port), err, nil)
+	return lib.ResultByError("Probe using v6 IP", lib.ConnectionAssertion(host, port), err, nil)
 }
 
 func probe(host string, port int, argTimeout int) error {
@@ -44,8 +44,4 @@ func probe(host string, port int, argTimeout int) error {
 	}
 
 	return nil
-}
-
-func probeAssertion(host string, port int) string {
-	return "Connection to " + host + ":" + strconv.Itoa(port)
 }

@@ -68,3 +68,7 @@ func GetHost(args Args, fallback string) string {
 	}
 	return fallback
 }
+
+func ConnectionAssertion(host string, port int) string {
+	return "Connection to " + host + ":" + strconv.Itoa(port)
+}
